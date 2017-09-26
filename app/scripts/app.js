@@ -6,6 +6,11 @@
             requireBase: false
         });
         $stateProvider
+            .state('playerBar', {
+              url: '/playerBar',
+              controller: 'PlayerBarCtrl as playerBar',
+              templateUrl: '/templates/player_bar.html'
+            })
             .state('landing', {
               url: '/',
               controller: 'LandingCtrl as landing',
