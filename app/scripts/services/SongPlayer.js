@@ -1,5 +1,6 @@
 (function() {
-    function SongPlayer(Fixtures) {
+    function SongPlayer($rootScope, Fixtures) {
+
           /**
           * @desc Buzz object audio file
           * @type {Object}
@@ -15,13 +16,20 @@
 
           var setSong = function(song) {
              if (currentBuzzObject) {
-                 currentBuzzObject.stop();
-                 SongPlayer.currentSong.playing = null;
+               stopSong(SongPlayer.currentSong);
+                //  currentBuzzObject.stop();
+                //  SongPlayer.currentSong.playing = null;
              }
 
              currentBuzzObject = new buzz.sound(song.audioUrl, {
                  formats: ['mp3'],
                  preload: true
+             });
+
+             currentBuzzObject.bind('timeupdate', function() {
+               $rootScope.$apply(function() {
+                 SongPlayer.currentTime = currentBuzzObject.getTime();
+               });
              });
 
              SongPlayer.currentSong = song;
@@ -38,6 +46,14 @@
           };
 
           SongPlayer.currentSong = null;
+          /**
+          * @desc Current playback time (in seconds) of currently playing song
+          * @type {Number}
+          */
+          SongPlayer.currentTime = null;
+
+          SongPlayer.volume = 80;
+
           SongPlayer.play = function(song) {
             song = song || SongPlayer.currentSong;
             if (SongPlayer.currentSong !== song) {
@@ -60,8 +76,7 @@
             var currentSongIndex = getSongIndex(SongPlayer.currentSong);
             currentSongIndex--;
             if (currentSongIndex < 0) {
-              currentBuzzObject.stop();
-              SongPlayer.currentSong.playing = null;
+              stopSong(SongPlayer.currentSong)
             } else {
               var song = currentAlbum.songs[currentSongIndex];
               setSong(song);
@@ -72,9 +87,9 @@
           SongPlayer.next = function() {
             var currentSongIndex = getSongIndex(SongPlayer.currentSong);
             currentSongIndex++;
-            if (currentSongIndex > getSongIndex) {
-              currentBuzzObject.stop();
-              SongPlayer.currentSong.playing = null;
+            // if the index goes beyond the length of the song array
+            if (currentSongIndex > currentAlbum.songs.length - 1) {
+              stopSong(SongPlayer.currentSong)
             } else {
               var song = currentAlbum.songs[currentSongIndex];
               setSong(song);
@@ -82,7 +97,22 @@
             }
 
           };
+          /**
+           * @function setCurrentTime
+           * @desc Set current time (in seconds) of currently playing song
+           * @param {Number} time
+           */
+           SongPlayer.setCurrentTime = function(time) {
+               if (currentBuzzObject) {
+                   currentBuzzObject.setTime(time);
+               }
+           };
 
+           SongPlayer.setVolume = function(volume){
+             if (currentBuzzObject) {
+               currentBuzzObject.setVolume(volume);
+             }
+           }
           var getSongIndex = function(song) {
             return currentAlbum.songs.indexOf(song);
           };
@@ -92,5 +122,5 @@
 
      angular
          .module('blocJams')
-         .factory('SongPlayer', ['Fixtures', SongPlayer]);
+         .factory('SongPlayer', ['$rootScope', 'Fixtures', SongPlayer]);
  })();
