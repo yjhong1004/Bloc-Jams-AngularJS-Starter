@@ -103,7 +103,11 @@
                    currentBuzzObject.setTime(time);
                }
            };
-
+           SongPlayer.setVolume = function(volume){
+                if (currentBuzzObject) {
+                    currentBuzzObject.setVolume(volume);
+                }
+           }
           var getSongIndex = function(song) {
             return currentAlbum.songs.indexOf(song);
           };
