@@ -1,6 +1,9 @@
 (function() {
     function SongPlayer($rootScope, Fixtures) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> checkpoint-directives2
           /**
           * @desc Buzz object audio file
           * @type {Object}
@@ -28,8 +31,13 @@
 
              currentBuzzObject.bind('timeupdate', function() {
                $rootScope.$apply(function() {
+<<<<<<< HEAD
                  SongPlayer.currentTime = currentBuzzObject.getTime();
                });
+=======
+                SongPlayer.currentTime = currentBuzzObject.getTime();
+                });
+>>>>>>> checkpoint-directives2
              });
 
              SongPlayer.currentSong = song;
@@ -51,9 +59,12 @@
           * @type {Number}
           */
           SongPlayer.currentTime = null;
+<<<<<<< HEAD
 
           SongPlayer.volume = 80;
 
+=======
+>>>>>>> checkpoint-directives2
           SongPlayer.play = function(song) {
             song = song || SongPlayer.currentSong;
             if (SongPlayer.currentSong !== song) {
@@ -98,6 +109,7 @@
 
           };
           /**
+<<<<<<< HEAD
            * @function setCurrentTime
            * @desc Set current time (in seconds) of currently playing song
            * @param {Number} time
@@ -113,6 +125,17 @@
                currentBuzzObject.setVolume(volume);
              }
            }
+=======
+          * @function setCurrentTime
+          * @desc Set current time (in seconds) of currently playing song
+          * @param {Number} time
+          */
+          SongPlayer.setCurrentTime = function(time) {
+              if (currentBuzzObject) {
+                  currentBuzzObject.setTime(time);
+              }
+          };
+>>>>>>> checkpoint-directives2
           var getSongIndex = function(song) {
             return currentAlbum.songs.indexOf(song);
           };
